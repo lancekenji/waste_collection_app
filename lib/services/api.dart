@@ -17,4 +17,18 @@ class ApiService {
       return null;
     }
   }
+
+  Future<UserCheck?> forgotPassword(String email) async {
+    final response = await http.post(
+      Uri.parse(Endpoints.forgotPassword),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (response.statusCode == 200) {
+      return UserCheck.fromJson(jsonDecode(response.body));
+    } else {
+      return null;
+    }
+  }
 }

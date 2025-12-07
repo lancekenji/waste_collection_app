@@ -65,8 +65,10 @@ class _IntroViewState extends State<IntroView> {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.easeInOut;
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
           var offsetAnimation = animation.drive(tween);
           return SlideTransition(position: offsetAnimation, child: child);
         },
@@ -99,10 +101,10 @@ class _IntroViewState extends State<IntroView> {
                 ),
               ),
               Positioned(
-                top: 150,
+                top: 130,
                 left: 0,
                 right: 0,
-                bottom: 100,
+                bottom: 80,
                 child: PageView.builder(
                   controller: _pageController,
                   onPageChanged: (index) {
@@ -195,21 +197,26 @@ class _IntroViewState extends State<IntroView> {
       child: Column(
         children: [
           Expanded(
-            flex: 5,
             child: Center(
-              child: Image.asset(
-                page.image,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.image, size: 100),
-                  );
-                },
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 300,
+                  maxWidth: 300,
+                ),
+                child: Image.asset(
+                  page.image,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image, size: 100),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Text(
             page.title,
             style: const TextStyle(
@@ -224,16 +231,12 @@ class _IntroViewState extends State<IntroView> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               page.description,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xFF004aad),
-              ),
+              style: const TextStyle(fontSize: 15, color: Color(0xFF004aad)),
               textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 4,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
         ],
       ),
     );

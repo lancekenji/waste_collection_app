@@ -1,38 +1,73 @@
 import 'package:flutter/material.dart';
-import '../views/signup.dart';
-import '../views/forgot.dart';
-import '../controllers/login_controller.dart';
+import 'login.dart';
+import '../controllers/forgot_controller.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class ForgotPasswordView extends StatefulWidget {
+  const ForgotPasswordView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   final _userController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final LoginController _controller = LoginController();
+  final ForgotController _controller = ForgotController();
   bool _loading = false;
-  bool _obscurePassword = true;
 
-  void _handleLogin() async {
-    setState(() => _loading = true);
-    bool success = await _controller.login(
-      _userController.text,
-      _passwordController.text,
+  void _handleForgotPassword() async {
+    if (_userController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your email or phone number'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: Color(0xFF004aad)),
+      ),
     );
+
+    setState(() => _loading = true);
+    String result = await _controller.forgotPassword(_userController.text);
     setState(() => _loading = false);
 
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful!')),
-      );
+    if (mounted) {
+      Navigator.pop(context);
+    }
+
+    if (result == 'Success') {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Password reset link sent! Check your email or phone.',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginView()),
+          );
+        }
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid username or password')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -53,13 +88,14 @@ class _LoginViewState extends State<LoginView> {
               left: 0,
               right: 0,
               height: 500,
-              child: Image.asset(
-                'assets/images/splash.png',
-                fit: BoxFit.contain,
+              child: const Icon(
+                Icons.lock,
+                size: 100,
+                color: Color(0xFF004aad),
               ),
             ),
             Positioned(
-              top: 150,
+              top: 160,
               left: 0,
               right: 0,
               bottom: 0,
@@ -69,12 +105,20 @@ class _LoginViewState extends State<LoginView> {
                   child: Column(
                     children: [
                       Text(
-                        "Welcome, Tagaytayeño!",
+                        "Forgot Password?",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF004aad),
                         ),
+                      ),
+                      Text(
+                        "No worries, we\'ll send you reset instructions",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Color(0xFF004aad),
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 32),
                       Container(
@@ -89,7 +133,7 @@ class _LoginViewState extends State<LoginView> {
                         child: Column(
                           children: [
                             const Text(
-                              'Sign In',
+                              'Forgot Password',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -103,128 +147,62 @@ class _LoginViewState extends State<LoginView> {
                               decoration: InputDecoration(
                                 hintText: 'Email or Phone',
                                 hintStyle: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                prefixIcon: const Icon(Icons.person,
-                                    color: Colors.white),
-                                filled: true,
-                                fillColor: Colors.white.withOpacity(0.1),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                  color: Colors.white.withOpacity(0.7),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextField(
-                              controller: _passwordController,
-                              obscureText: _obscurePassword,
-                              style: const TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: 'Password',
-                                hintStyle: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                prefixIcon:
-                                    const Icon(Icons.lock, color: Colors.white),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _obscurePassword
-                                        ? Icons.visibility_off
-                                        : Icons.visibility,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscurePassword = !_obscurePassword;
-                                    });
-                                  },
+                                prefixIcon: const Icon(
+                                  Icons.person,
+                                  color: Colors.white,
                                 ),
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.1),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (context) => const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  );
-                                  await Future.delayed(
-                                      const Duration(milliseconds: 500));
-                                  if (mounted) {
-                                    Navigator.pop(context);
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ForgotPasswordView(),
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: const Text(
-                                  'Forgot Password?',
-                                  style: TextStyle(
                                     color: Colors.white,
-                                    decoration: TextDecoration.underline,
+                                    width: 2,
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 24),
                             _loading
                                 ? const CircularProgressIndicator(
-                                    color: Colors.white)
+                                    color: Colors.white,
+                                  )
                                 : SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
-                                      onPressed: _handleLogin,
+                                      onPressed: _handleForgotPassword,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
-                                        foregroundColor:
-                                            const Color(0xFF004aad),
+                                        foregroundColor: const Color(
+                                          0xFF004aad,
+                                        ),
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
+                                          vertical: 16,
+                                        ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                         ),
                                       ),
                                       child: const Text(
-                                        'Login',
+                                        'Send Reset Password Link',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -236,10 +214,6 @@ class _LoginViewState extends State<LoginView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  "Don't have an account? ",
-                                  style: TextStyle(color: Colors.white),
-                                ),
                                 TextButton(
                                   onPressed: () async {
                                     showDialog(
@@ -252,14 +226,15 @@ class _LoginViewState extends State<LoginView> {
                                       ),
                                     );
                                     await Future.delayed(
-                                        const Duration(milliseconds: 500));
+                                      const Duration(milliseconds: 500),
+                                    );
                                     if (mounted) {
                                       Navigator.pop(context);
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const SignUpView(),
+                                              const LoginView(),
                                         ),
                                       );
                                     }
@@ -271,11 +246,11 @@ class _LoginViewState extends State<LoginView> {
                                         MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: const Text(
-                                    'Sign Up',
+                                    'Go back to login',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
+                                      decoration: TextDecoration.none,
                                     ),
                                   ),
                                 ),
