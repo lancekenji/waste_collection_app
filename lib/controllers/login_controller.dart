@@ -4,10 +4,10 @@ import '../utils/session.dart';
 class LoginController {
   final ApiService apiService = ApiService();
 
-  Future<bool> login(String email, String password) async {
-    final user = await apiService.login(email, password);
+  Future<bool> login(String username, String password) async {
+    final user = await apiService.login(username, password);
     if (user != null) {
-      await saveToken(user.token); // save session
+      await saveToken(user.token);
       return true;
     }
     return false;
