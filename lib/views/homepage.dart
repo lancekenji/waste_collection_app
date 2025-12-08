@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePageView> {
   final CarouselSliderController _carouselController =
       CarouselSliderController();
   final ApiService _apiService = ApiService();
-  
+
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, List<ScheduleEvent>> _events = {};
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePageView> {
       for (var schedule in schedules) {
         final date = DateTime.parse(schedule.scheduleDate);
         final dateKey = DateTime(date.year, date.month, date.day);
-        
+
         final event = ScheduleEvent(
           time: schedule.scheduleTime,
           wasteTypes: schedule.wasteTypes,
@@ -254,8 +254,8 @@ class _HomePageState extends State<HomePageView> {
                 const ProfileView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+              return FadeTransition(opacity: animation, child: child);
+            },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -268,8 +268,8 @@ class _HomePageState extends State<HomePageView> {
                 const AboutView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+              return FadeTransition(opacity: animation, child: child);
+            },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -282,8 +282,8 @@ class _HomePageState extends State<HomePageView> {
                 const FAQView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+              return FadeTransition(opacity: animation, child: child);
+            },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -296,8 +296,8 @@ class _HomePageState extends State<HomePageView> {
                 const ReportView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
+              return FadeTransition(opacity: animation, child: child);
+            },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -434,7 +434,8 @@ class _HomePageState extends State<HomePageView> {
                       : _announcements.isEmpty
                           ? Container(
                               height: 180,
-                              margin: const EdgeInsets.symmetric(horizontal: 30),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 30),
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(12),
@@ -462,18 +463,21 @@ class _HomePageState extends State<HomePageView> {
                                 final announcement = _announcements[index];
                                 return Container(
                                   width: double.infinity,
-                                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: announcement.announcementPhoto != null
                                       ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                           child: Image.network(
-                                            'http://your-domain.com${announcement.announcementPhoto}',
+                                            'https://toristask.site${announcement.announcementPhoto}',
                                             fit: BoxFit.cover,
-                                            errorBuilder: (context, error, stackTrace) {
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
                                               return const Center(
                                                 child: Icon(
                                                   Icons.image,
@@ -482,10 +486,13 @@ class _HomePageState extends State<HomePageView> {
                                                 ),
                                               );
                                             },
-                                            loadingBuilder: (context, child, loadingProgress) {
-                                              if (loadingProgress == null) return child;
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
                                               return const Center(
-                                                child: CircularProgressIndicator(
+                                                child:
+                                                    CircularProgressIndicator(
                                                   color: Color(0xFF0D47A1),
                                                 ),
                                               );

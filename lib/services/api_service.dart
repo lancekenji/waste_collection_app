@@ -12,6 +12,7 @@ class ApiService {
     required String barangay,
   }) async {
     try {
+      print('Calling signup URL: ${Endpoints.signup}');
       final response = await http.post(
         Uri.parse(Endpoints.signup),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -23,12 +24,16 @@ class ApiService {
         },
       );
 
+      print('Signup response status: ${response.statusCode}');
+      print('Signup response body: ${response.body}');
+
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
         return {'success': false, 'message': 'Server error occurred'};
       }
     } catch (e) {
+      print('Signup error: $e');
       return {'success': false, 'message': 'Connection error: $e'};
     }
   }

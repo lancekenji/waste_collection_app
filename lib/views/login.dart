@@ -37,12 +37,12 @@ class _LoginViewState extends State<LoginView> {
     );
 
     setState(() => _loading = true);
-    
+
     final result = await _controller.login(
       _userController.text.trim(),
       _passwordController.text,
     );
-    
+
     setState(() => _loading = false);
 
     if (mounted) {
