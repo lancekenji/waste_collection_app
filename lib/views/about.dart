@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'faq.dart';
 import 'report.dart';
+import 'profile.dart';
 
 class AboutView extends StatefulWidget {
   const AboutView({super.key});
@@ -62,96 +63,96 @@ class _AboutViewState extends State<AboutView> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).padding.top + kToolbarHeight,
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'About Waste Collection Scheduler & Tracker App',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: kToolbarHeight),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'About Waste Collection Scheduler & Tracker App',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'The Waste Collection Scheduler & Tracker is a mobile and web-based application designed to help Local Government Units (LGUs) enhance the efficiency of waste management operations. It allows residents to easily view collection schedules, receive real-time notifications, and track garbage trucks within their area. On the LGU side, the system helps administrators manage collection schedules, monitor truck activity, and handle citizen reports seamlessly.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                        height: 1.5,
+                      const SizedBox(height: 12),
+                      const Text(
+                        'The Waste Collection Scheduler & Tracker is a mobile and web-based application designed to help Local Government Units (LGUs) enhance the efficiency of waste management operations. It allows residents to easily view collection schedules, receive real-time notifications, and track garbage trucks within their area. On the LGU side, the system helps administrators manage collection schedules, monitor truck activity, and handle citizen reports seamlessly.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.justify,
                       ),
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'By combining scheduling, tracking, and reporting features in one platform, the system promotes better communication between the LGU and the community, ensuring timely collection and improved waste segregation practices.',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                        height: 1.5,
+                      const SizedBox(height: 16),
+                      const Text(
+                        'By combining scheduling, tracking, and reporting features in one platform, the system promotes better communication between the LGU and the community, ensuring timely collection and improved waste segregation practices.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.justify,
                       ),
-                      textAlign: TextAlign.justify,
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Meet the Team',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Meet the Team',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 340,
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: 320,
-                    viewportFraction: 0.7,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    scrollPhysics: const BouncingScrollPhysics(),
+                    ],
                   ),
-                  items: [
-                    _buildTeamCard(
-                      name: 'Lance Kenji Parce',
-                      position: 'Leader | Developer',
-                      image: null, // placeholder Icon
-                    ),
-                    _buildTeamCard(
-                      name: 'Jon Lyndon Mojica',
-                      position: 'Project Manager',
-                      image: null, // placeholder Icon
-                    ),
-                    _buildTeamCard(
-                      name: 'Angela Badilla',
-                      position: 'UI/UX Designer',
-                      image: null, // placeholder Icon
-                    ),
-                    _buildTeamCard(
-                      name: 'Kristine Joy Camay',
-                      position: 'UI/UX Designer',
-                      image: null, // placeholder Icon
-                    ),
-                  ],
                 ),
-              ),
-              const SizedBox(height: 24),
-            ],
+                SizedBox(
+                  height: 340,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 320,
+                      viewportFraction: 0.7,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      scrollPhysics: const BouncingScrollPhysics(),
+                    ),
+                    items: [
+                      _buildTeamCard(
+                        name: 'Lance Kenji Parce',
+                        position: 'Leader | Developer',
+                        image: null, // placeholder Icon
+                      ),
+                      _buildTeamCard(
+                        name: 'Jon Lyndon Mojica',
+                        position: 'Project Manager',
+                        image: null, // placeholder Icon
+                      ),
+                      _buildTeamCard(
+                        name: 'Angela Badilla',
+                        position: 'UI/UX Designer',
+                        image: null, // placeholder Icon
+                      ),
+                      _buildTeamCard(
+                        name: 'Kristine Joy Camay',
+                        position: 'UI/UX Designer',
+                        image: null, // placeholder Icon
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),
@@ -173,6 +174,19 @@ class _AboutViewState extends State<AboutView> {
               Navigator.pop(context);
               return;
             } else if (index == 1) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const ProfileView(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
             } else if (index == 3) {
               Navigator.pop(context);
               Navigator.push(

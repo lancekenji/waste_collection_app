@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'about.dart';
 import 'faq.dart';
 import 'report.dart';
+import 'profile.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -199,6 +200,18 @@ class _HomePageState extends State<HomePageView> {
 
     switch (index) {
       case 1:
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const ProfileView(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: const Duration(milliseconds: 300),
+          ),
+        ).then((_) => setState(() => _selectedBottomIndex = 0));
         break;
       case 2:
         Navigator.push(
@@ -284,197 +297,209 @@ class _HomePageState extends State<HomePageView> {
             fit: BoxFit.fill,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 150,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Image.asset(
-                        'assets/images/homepage_header.png',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                    Positioned(
-                      top: 85,
-                      left: 30,
-                      right: 30,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0x79ffffff),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  DateFormat('h:mm a').format(DateTime.now()),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0D47A1),
-                                  ),
-                                ),
-                                Text(
-                                  DateFormat(
-                                    'EEE, MMMM d',
-                                  ).format(DateTime.now()),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Icon(
-                              Icons.today,
-                              color: Color(0xFF64B5F6),
-                              size: 40,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: CarouselSlider.builder(
-                  options: CarouselOptions(
-                    height: 180,
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.85,
-                  ),
-                  itemCount: 3,
-                  itemBuilder: (context, index, realIndex) {
-                    return Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.image, size: 48, color: Colors.grey),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Image.asset(
-                  'assets/images/homepage_segregate.png',
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
                   width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _selectedTabIndex = 0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: _selectedTabIndex == 0
-                                    ? const Color(0xFF0D47A1)
-                                    : Colors.transparent,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                ),
+                  height: 150,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Image.asset(
+                          'assets/images/homepage_header.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
+                      Positioned(
+                        top: 95,
+                        left: 30,
+                        right: 30,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0x79ffffff),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
                               ),
-                              child: Text(
-                                'Guides',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    DateFormat('h:mm a').format(DateTime.now()),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF0D47A1),
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat(
+                                      'EEE, MMMM d',
+                                    ).format(DateTime.now()),
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const Icon(
+                                Icons.today,
+                                color: Color(0xFF64B5F6),
+                                size: 40,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: CarouselSlider.builder(
+                    options: CarouselOptions(
+                      height: 180,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.85,
+                    ),
+                    itemCount: 3,
+                    itemBuilder: (context, index, realIndex) {
+                      return Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.image,
+                            size: 48,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Image.asset(
+                    'assets/images/homepage_segregate.png',
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _selectedTabIndex = 0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
                                   color: _selectedTabIndex == 0
-                                      ? Colors.white
-                                      : Colors.black54,
+                                      ? const Color(0xFF0D47A1)
+                                      : Colors.transparent,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Guides',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _selectedTabIndex == 0
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _selectedTabIndex = 1),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: _selectedTabIndex == 1
-                                    ? const Color(0xFF0D47A1)
-                                    : Colors.transparent,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(12),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _selectedTabIndex = 1),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
                                 ),
-                              ),
-                              child: Text(
-                                'Calendar',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                decoration: BoxDecoration(
                                   color: _selectedTabIndex == 1
-                                      ? Colors.white
-                                      : Colors.black54,
+                                      ? const Color(0xFF0D47A1)
+                                      : Colors.transparent,
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Calendar',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: _selectedTabIndex == 1
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    if (_selectedTabIndex == 0) _buildGuidesTab(),
-                    if (_selectedTabIndex == 1) _buildCalendarTab(),
-                  ],
+                        ],
+                      ),
+                      if (_selectedTabIndex == 0) _buildGuidesTab(),
+                      if (_selectedTabIndex == 1) _buildCalendarTab(),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 80),
-            ],
+                const SizedBox(height: 80),
+              ],
+            ),
           ),
         ),
       ),

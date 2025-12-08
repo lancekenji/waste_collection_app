@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waste Collection System',
       theme: ThemeData.light(),
-      home: const HomePageView(),
+      home: const SplashView(),
     );
   }
 }

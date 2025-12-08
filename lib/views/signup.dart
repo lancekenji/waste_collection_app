@@ -22,6 +22,44 @@ class _SignUpScreenState extends State<SignUpView> {
   double _passwordStrength = 0.0;
   String _passwordStrengthText = '';
   Color _passwordStrengthColor = Colors.grey;
+  String? _selectedBarangay;
+
+  final List<String> _barangays = [
+    'Asisan',
+    'Bagong Tubig',
+    'Calabuso',
+    'Dapdap East',
+    'Dapdap West',
+    'Francisco',
+    'Guinhawa North',
+    'Guinhawa South',
+    'Iruhin East',
+    'Iruhin South',
+    'Iruhin West',
+    'Kaybagal Central',
+    'Kaybagal North',
+    'Kaybagal South (Poblacion)',
+    'Mag-Asawang Ilat',
+    'Maharlika East',
+    'Maharlika West',
+    'Maitim 2nd Central',
+    'Maitim 2nd East',
+    'Maitim 2nd West',
+    'Mendez Crossing East',
+    'Mendez Crossing West',
+    'Neogan',
+    'Patutong Malaki North',
+    'Patutong Malaki South',
+    'Sambong',
+    'San Jose',
+    'Silang Junction North',
+    'Silang Junction South',
+    'Sungay East',
+    'Sungay West',
+    'Tolentino East',
+    'Tolentino West',
+    'Zambal',
+  ];
 
   @override
   void dispose() {
@@ -125,6 +163,13 @@ class _SignUpScreenState extends State<SignUpView> {
     }
     if (value != _passwordController.text) {
       return 'Passwords do not match';
+    }
+    return null;
+  }
+
+  String? _validateBarangay(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select your barangay';
     }
     return null;
   }
@@ -630,8 +675,8 @@ class _SignUpScreenState extends State<SignUpView> {
                             borderRadius: BorderRadius.circular(40),
                             child: Image.asset(
                               'assets/images/signup.png',
-                              width: 80,
-                              height: 80,
+                              width: 150,
+                              height: 150,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(
@@ -666,30 +711,30 @@ class _SignUpScreenState extends State<SignUpView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                             width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.red),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Colors.red,
                             width: 2,
@@ -711,30 +756,30 @@ class _SignUpScreenState extends State<SignUpView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                             width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.red),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Colors.red,
                             width: 2,
@@ -770,30 +815,30 @@ class _SignUpScreenState extends State<SignUpView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                             width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.red),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Colors.red,
                             width: 2,
@@ -862,36 +907,91 @@ class _SignUpScreenState extends State<SignUpView> {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Color(0xFF0D47A1),
                             width: 2,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.red),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
                             color: Colors.red,
                             width: 2,
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: _selectedBarangay,
+                      validator: _validateBarangay,
+                      decoration: InputDecoration(
+                        hintText: 'Select Barangay',
+                        prefixIcon: const Icon(
+                          Icons.location_on,
+                          color: Color(0xFF0D47A1),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF0D47A1),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF0D47A1),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Color(0xFF0D47A1),
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.red),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                      items: _barangays.map((String barangay) {
+                        return DropdownMenuItem<String>(
+                          value: barangay,
+                          child: Text(barangay),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedBarangay = newValue;
+                        });
+                      },
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -938,7 +1038,7 @@ class _SignUpScreenState extends State<SignUpView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D47A1),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: const Text(

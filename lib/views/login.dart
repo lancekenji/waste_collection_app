@@ -18,6 +18,14 @@ class _LoginViewState extends State<LoginView> {
   bool _obscurePassword = true;
 
   void _handleLogin() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: Color(0xFF004aad)),
+      ),
+    );
+
     setState(() => _loading = true);
     bool success = await _controller.login(
       _userController.text,
@@ -25,14 +33,22 @@ class _LoginViewState extends State<LoginView> {
     );
     setState(() => _loading = false);
 
+    if (mounted) {
+      Navigator.pop(context);
+    }
+
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Successful!')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Login Successful!')));
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid username or password')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid username or password')),
+        );
+      }
     }
   }
 
@@ -103,25 +119,34 @@ class _LoginViewState extends State<LoginView> {
                               decoration: InputDecoration(
                                 hintText: 'Email or Phone',
                                 hintStyle: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                prefixIcon: const Icon(Icons.person,
-                                    color: Colors.white),
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                                prefixIcon: const Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
                                 filled: true,
                                 fillColor: Colors.white.withOpacity(0.1),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -133,9 +158,12 @@ class _LoginViewState extends State<LoginView> {
                               decoration: InputDecoration(
                                 hintText: 'Password',
                                 hintStyle: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                prefixIcon:
-                                    const Icon(Icons.lock, color: Colors.white),
+                                  color: Colors.white.withOpacity(0.7),
+                                ),
+                                prefixIcon: const Icon(
+                                  Icons.lock,
+                                  color: Colors.white,
+                                ),
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _obscurePassword
@@ -154,17 +182,23 @@ class _LoginViewState extends State<LoginView> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: const BorderSide(
-                                      color: Colors.white, width: 2),
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -183,7 +217,8 @@ class _LoginViewState extends State<LoginView> {
                                     ),
                                   );
                                   await Future.delayed(
-                                      const Duration(milliseconds: 500));
+                                    const Duration(milliseconds: 500),
+                                  );
                                   if (mounted) {
                                     Navigator.pop(context);
                                     Navigator.pushReplacement(
@@ -207,20 +242,24 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(height: 8),
                             _loading
                                 ? const CircularProgressIndicator(
-                                    color: Colors.white)
+                                    color: Colors.white,
+                                  )
                                 : SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       onPressed: _handleLogin,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,
-                                        foregroundColor:
-                                            const Color(0xFF004aad),
+                                        foregroundColor: const Color(
+                                          0xFF004aad,
+                                        ),
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
+                                          vertical: 16,
+                                        ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
                                         ),
                                       ),
                                       child: const Text(
@@ -252,7 +291,8 @@ class _LoginViewState extends State<LoginView> {
                                       ),
                                     );
                                     await Future.delayed(
-                                        const Duration(milliseconds: 500));
+                                      const Duration(milliseconds: 500),
+                                    );
                                     if (mounted) {
                                       Navigator.pop(context);
                                       Navigator.pushReplacement(
