@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'about.dart';
+import 'faq.dart';
 
 class ReportView extends StatefulWidget {
   const ReportView({super.key});
@@ -119,13 +121,7 @@ class _ReportViewState extends State<ReportView> {
             : Colors.transparent,
         elevation: _showAppBarBackground ? 4 : 0,
         surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: _showAppBarBackground ? Colors.white : Colors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'Report An Issue',
           style: TextStyle(
@@ -133,6 +129,7 @@ class _ReportViewState extends State<ReportView> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -148,265 +145,240 @@ class _ReportViewState extends State<ReportView> {
               SizedBox(
                 height: MediaQuery.of(context).padding.top + kToolbarHeight,
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF64B5F6),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'This platform is designed to help residents report any missed or improperly disposed garbage in their community. The purpose of this is to ensure timely action is taken to address waste issues, keeping our neighborhoods clean, safe, and healthy for everyone.',
-                          style: TextStyle(fontSize: 13, height: 1.5),
-                        ),
-                        const SizedBox(height: 16),
-                        RichText(
-                          text: const TextSpan(
-                            style: TextStyle(
-                              fontSize: 13,
-                              height: 1.5,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(text: 'To submit a report, simply '),
-                              TextSpan(
-                                text: 'take a clear photo',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' of the trash you have observed and upload it here. In the description box below, ',
-                              ),
-                              TextSpan(
-                                text:
-                                    'provide details such as the location, type of waste, and any other information',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' you think is important. You can also use this section to ',
-                              ),
-                              TextSpan(
-                                text: 'share complaints or concerns',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' regarding waste management in your area.',
-                              ),
-                            ],
+              Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'This platform is designed to help residents report any missed or improperly disposed garbage in their community. The purpose of this is to ensure timely action is taken to address waste issues, keeping our neighborhoods clean, safe, and healthy for everyone.',
+                        style: TextStyle(fontSize: 16, height: 1.5),
+                      ),
+                      const SizedBox(height: 16),
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Colors.black,
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        RichText(
-                          text: const TextSpan(
-                            style: TextStyle(
-                              fontSize: 13,
-                              height: 1.5,
-                              color: Colors.black,
+                          children: [
+                            TextSpan(text: 'To submit a report, simply '),
+                            TextSpan(
+                              text: 'take a clear photo',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            children: [
-                              TextSpan(
-                                text:
-                                    'By reporting missed garbage, residents can enjoy several benefits, including:\n\n',
-                              ),
-                              TextSpan(
-                                text: 'Cleaner surroundings',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' – reducing pollution and unpleasant odors.\n',
-                              ),
-                              TextSpan(
-                                text: 'Healthier environment',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' – preventing the spread of diseases caused by accumulated waste.\n',
-                              ),
-                              TextSpan(
-                                text: 'Faster resolution',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' – alerting authorities so our team can act promptly.\n',
-                              ),
-                              TextSpan(
-                                text: 'Community involvement',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' – giving residents a voice in keeping their neighborhood safe and organized.',
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        RichText(
-                          text: const TextSpan(
-                            style: TextStyle(
-                              fontSize: 13,
-                              height: 1.5,
-                              color: Colors.black,
+                            TextSpan(
+                              text:
+                                  ' of the trash you have observed and upload it here. In the description box below, ',
                             ),
-                            children: [
-                              TextSpan(text: 'Our team will '),
-                              TextSpan(
-                                text: 'review each submission promptly',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ', and '),
-                              TextSpan(
-                                text: 'take appropriate action',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                text:
-                                    ' to resolve the issue. Together, we can build a ',
-                              ),
-                              TextSpan(
-                                text: 'cleaner, healthier, and more organized',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ' community for everyone.'),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        TextField(
-                          controller: _descriptionController,
-                          maxLines: 5,
-                          decoration: InputDecoration(
-                            hintText: 'Description...',
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                            TextSpan(
+                              text:
+                                  'provide details such as the location, type of waste, and any other information',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            contentPadding: const EdgeInsets.all(16),
-                          ),
+                            TextSpan(
+                              text:
+                                  ' you think is important. You can also use this section to ',
+                            ),
+                            TextSpan(
+                              text: 'share complaints or concerns',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text: ' regarding waste management in your area.',
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        if (_selectedImage != null) ...[
-                          Stack(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.grey[200],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: kIsWeb
-                                      ? Image.network(
-                                          _selectedImage!.path,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.file(
-                                          File(_selectedImage!.path),
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
+                      ),
+                      const SizedBox(height: 16),
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                              text:
+                                  'By reporting missed garbage, residents can enjoy several benefits, including:\n\n',
+                            ),
+                            TextSpan(
+                              text: 'Cleaner surroundings',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' – reducing pollution and unpleasant odors.\n',
+                            ),
+                            TextSpan(
+                              text: 'Healthier environment',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' – preventing the spread of diseases caused by accumulated waste.\n',
+                            ),
+                            TextSpan(
+                              text: 'Faster resolution',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' – alerting authorities so our team can act promptly.\n',
+                            ),
+                            TextSpan(
+                              text: 'Community involvement',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' – giving residents a voice in keeping their neighborhood safe and organized.',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            TextSpan(text: 'Our team will '),
+                            TextSpan(
+                              text: 'review each submission promptly',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: ', and '),
+                            TextSpan(
+                              text: 'take appropriate action',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                              text:
+                                  ' to resolve the issue. Together, we can build a ',
+                            ),
+                            TextSpan(
+                              text: 'cleaner, healthier, and more organized',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(text: ' community for everyone.'),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      TextField(
+                        controller: _descriptionController,
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hintText: 'Description...',
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.all(16),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      if (_selectedImage != null) ...[
+                        Stack(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.grey[200],
                               ),
-                              Positioned(
-                                top: 8,
-                                right: 8,
-                                child: GestureDetector(
-                                  onTap: _removeImage,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: kIsWeb
+                                    ? Image.network(
+                                        _selectedImage!.path,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.file(
+                                        File(_selectedImage!.path),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: GestureDetector(
+                                onTap: _removeImage,
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 20,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                        Center(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: _pickImage,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                      Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _pickImage,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
                                   ),
-                                  child: const Text(
-                                    'Upload a photo',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Upload a photo',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              if (!kIsWeb) ...[
-                                const SizedBox(height: 12),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: OutlinedButton.icon(
-                                    onPressed: _takePhoto,
-                                    icon: const Icon(Icons.camera_alt),
-                                    label: const Text(
-                                      'Take a photo',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    style: OutlinedButton.styleFrom(
-                                      foregroundColor: Colors.black,
-                                      side: const BorderSide(
-                                        color: Colors.black,
-                                        width: 2,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 16,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            ),
+                            if (!kIsWeb) ...[
                               const SizedBox(height: 12),
                               SizedBox(
                                 width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: _submitReport,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF0D47A1),
-                                    foregroundColor: Colors.white,
+                                child: OutlinedButton.icon(
+                                  onPressed: _takePhoto,
+                                  icon: const Icon(Icons.camera_alt),
+                                  label: const Text(
+                                    'Take a photo',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: Colors.black,
+                                    side: const BorderSide(
+                                      color: Colors.black,
+                                      width: 2,
+                                    ),
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 16,
                                     ),
@@ -414,25 +386,129 @@ class _ReportViewState extends State<ReportView> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                   ),
-                                  child: const Text(
-                                    'Submit Report',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                                 ),
                               ),
                             ],
-                          ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _submitReport,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF0D47A1),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Submit Report',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: 4,
+          onTap: (index) {
+            if (index == 4) return;
+            if (index == 0) {
+              Navigator.pop(context);
+              return;
+            } else if (index == 1) {
+            } else if (index == 2) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const AboutView(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            } else if (index == 3) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const FAQView(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            } else if (index == 5) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: const Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color(0xFF0D47A1),
+          unselectedItemColor: Colors.grey,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About Us'),
+            BottomNavigationBarItem(icon: Icon(Icons.help), label: 'FAQs'),
+            BottomNavigationBarItem(icon: Icon(Icons.report), label: 'Report'),
+            BottomNavigationBarItem(icon: Icon(Icons.logout), label: 'Logout'),
+          ],
         ),
       ),
     );

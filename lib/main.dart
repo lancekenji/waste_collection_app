@@ -5,6 +5,7 @@ import 'views/forgot.dart';
 import 'views/about.dart';
 import 'views/faq.dart';
 import 'views/report.dart';
+import 'views/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Waste Collection System',
       theme: ThemeData.light(),
-      home: const FAQView(),
+      home: const HomePageView(),
     );
   }
 }

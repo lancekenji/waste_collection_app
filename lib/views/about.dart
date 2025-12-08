@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'faq.dart';
+import 'report.dart';
 
 class AboutView extends StatefulWidget {
   const AboutView({super.key});
@@ -43,13 +45,7 @@ class _AboutViewState extends State<AboutView> {
             : Colors.transparent,
         elevation: _showAppBarBackground ? 4 : 0,
         surfaceTintColor: Colors.transparent,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: _showAppBarBackground ? Colors.white : Colors.black,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
           'About Us',
           style: TextStyle(
@@ -157,6 +153,93 @@ class _AboutViewState extends State<AboutView> {
               const SizedBox(height: 24),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: 2,
+          onTap: (index) {
+            if (index == 2) return;
+            if (index == 0) {
+              Navigator.pop(context);
+              return;
+            } else if (index == 1) {
+            } else if (index == 3) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const FAQView(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            } else if (index == 4) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const ReportView(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            } else if (index == 5) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/login');
+                      },
+                      child: const Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: const Color(0xFF0D47A1),
+          unselectedItemColor: Colors.grey,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About Us'),
+            BottomNavigationBarItem(icon: Icon(Icons.help), label: 'FAQs'),
+            BottomNavigationBarItem(icon: Icon(Icons.report), label: 'Report'),
+            BottomNavigationBarItem(icon: Icon(Icons.logout), label: 'Logout'),
+          ],
         ),
       ),
     );
