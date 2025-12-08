@@ -1,19 +1,21 @@
-import '../services/api.dart';
+import '../services/api_service.dart';
 import '../utils/session.dart';
 
 class LoginController {
-  final ApiService apiService = ApiService();
+  final ApiService _apiService = ApiService();
 
-  Future<bool> login(String username, String password) async {
-    final user = await apiService.login(username, password);
-    if (user != null) {
-      await saveToken(user.token);
-      return true;
+  Future<Map<String, dynamic>> login(String email, String password) async {
+    final result = await _apiService.login(email, password);
+    
+    if (result['success'] == true) {
+      await saveUser(result['user']);
+      return {'success': true, 'message': result['message']};
     }
-    return false;
+    
+    return {'success': false, 'message': result['message']};
   }
 
   Future<void> logout() async {
-    await clearToken();
+    await clearUser();
   }
 }

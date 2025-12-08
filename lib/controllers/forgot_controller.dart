@@ -1,17 +1,14 @@
-import '../services/api.dart';
-import '../utils/session.dart';
+import '../services/api_service.dart';
 
 class ForgotController {
-  final ApiService apiService = ApiService();
+  final ApiService _apiService = ApiService();
 
-  Future<String> forgotPassword(String email) async {
-    final user = await apiService.forgotPassword(email);
-    if (user != null) {
-      if (!user.isValid) {
-        return 'Account with that username doesn\'t exists!';
-      }
-      return 'Success';
-    }
-    return 'Error';
+  Future<Map<String, dynamic>> requestPasswordReset(String email) async {
+    return await _apiService.requestPasswordReset(email);
+  }
+
+  Future<Map<String, dynamic>> resetPassword(
+      String token, String newPassword) async {
+    return await _apiService.resetPassword(token, newPassword);
   }
 }

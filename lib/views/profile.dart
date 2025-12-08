@@ -3,6 +3,8 @@ import 'homepage.dart';
 import 'about.dart';
 import 'faq.dart';
 import 'report.dart';
+import '../utils/session.dart';
+import '../models/user_model.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -22,9 +24,10 @@ class _ProfileViewState extends State<ProfileView> {
   bool _obscurePassword = true;
   bool _obscureRetypePassword = true;
   bool _isEditing = false;
+  bool _isLoading = true;
 
-  String _fullName = 'Juan Dela Cruz';
-  String _barangay = 'Kaybagal South (Poblacion)';
+  String _fullName = '';
+  String _barangay = '';
 
   @override
   void initState() {
@@ -56,10 +59,19 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<void> _loadUserData() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    setState(() {
-      _emailController.text = 'juan.delacruz@email.com';
-    });
+    final user = await getUser();
+    if (user != null) {
+      setState(() {
+        _fullName = user.userName;
+        _barangay = user.userBarangay;
+        _emailController.text = user.userEmail;
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   String? _validateEmail(String? value) {
@@ -115,7 +127,18 @@ class _ProfileViewState extends State<ProfileView> {
         ),
       );
 
-      await Future.delayed(const Duration(seconds: 2));
+      final currentUser = await getUser();
+      if (currentUser != null) {
+        final updatedUser = User(
+          userId: currentUser.userId,
+          userName: currentUser.userName,
+          userEmail: _emailController.text.trim(),
+          userBarangay: currentUser.userBarangay,
+          token: currentUser.token,
+        );
+        
+        await saveUser(updatedUser);
+      }
 
       if (mounted) {
         Navigator.pop(context);
@@ -154,7 +177,7 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         centerTitle: true,
         actions: [
-          if (!_isEditing)
+                      if (!_isEditing && !_isLoading)
             IconButton(
               icon: Icon(
                 Icons.edit,
@@ -168,7 +191,11 @@ class _ProfileViewState extends State<ProfileView> {
             ),
         ],
       ),
-      body: Container(
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF64B5F6)),
+            )
+          : Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg1.png'),
@@ -284,9 +311,8 @@ class _ProfileViewState extends State<ProfileView> {
                                       : Colors.grey,
                                 ),
                                 filled: true,
-                                fillColor: _isEditing
-                                    ? Colors.white
-                                    : Colors.grey[300],
+                                fillColor:
+                                    _isEditing ? Colors.white : Colors.grey[300],
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                   borderSide: _isEditing
@@ -328,8 +354,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 obscureText: _obscurePassword,
                                 validator: _validatePassword,
                                 decoration: InputDecoration(
-                                  hintText:
-                                      'Leave blank to keep current password',
+                                  hintText: 'Leave blank to keep current password',
                                   hintStyle: const TextStyle(fontSize: 12),
                                   prefixIcon: const Icon(
                                     Icons.lock,
@@ -434,11 +459,13 @@ class _ProfileViewState extends State<ProfileView> {
                                 children: [
                                   Expanded(
                                     child: ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        final user = await getUser();
                                         setState(() {
                                           _isEditing = false;
-                                          _emailController.text =
-                                              'juan.delacruz@email.com';
+                                          if (user != null) {
+                                            _emailController.text = user.userEmail;
+                                          }
                                           _passwordController.clear();
                                           _retypePasswordController.clear();
                                         });
@@ -449,8 +476,7 @@ class _ProfileViewState extends State<ProfileView> {
                                           vertical: 16,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                       child: const Text(
@@ -467,14 +493,12 @@ class _ProfileViewState extends State<ProfileView> {
                                     child: ElevatedButton(
                                       onPressed: _handleSave,
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF0D47A1),
+                                        backgroundColor: const Color(0xFF0D47A1),
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 16,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                       child: const Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'login.dart';
+import '../controllers/signup_controller.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -15,10 +16,12 @@ class _SignUpScreenState extends State<SignUpView> {
   final _emailPhoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _retypePasswordController = TextEditingController();
+  final SignupController _controller = SignupController();
 
   bool _obscurePassword = true;
   bool _obscureRetypePassword = true;
   bool _agreedToTerms = false;
+  bool _isLoading = false;
   double _passwordStrength = 0.0;
   String _passwordStrengthText = '';
   Color _passwordStrengthColor = Colors.grey;
@@ -583,7 +586,7 @@ class _SignUpScreenState extends State<SignUpView> {
     );
   }
 
-  void _handleSignUp() {
+  void _handleSignUp() async {
     if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -594,13 +597,50 @@ class _SignUpScreenState extends State<SignUpView> {
       return;
     }
 
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign up successful!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final result = await _controller.signup(
+      email: _emailPhoneController.text.trim(),
+      password: _passwordController.text,
+      name: _fullNameController.text.trim(),
+      barangay: _selectedBarangay!,
+    );
+
+    setState(() => _isLoading = false);
+
+    if (mounted) {
+      if (result['success'] == true) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Success'),
+            content: Text(result['message'] ?? 'Account created successfully'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginView()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message'] ?? 'Signup failed'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -748,7 +788,7 @@ class _SignUpScreenState extends State<SignUpView> {
                       validator: _validateEmailOrPhone,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: 'Email or Phone',
+                        hintText: 'Email',
                         prefixIcon: const Icon(
                           Icons.email,
                           color: Color(0xFF0D47A1),

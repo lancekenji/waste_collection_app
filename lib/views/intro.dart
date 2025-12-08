@@ -249,8 +249,9 @@ class _IntroViewState extends State<IntroView> {
       height: 8,
       width: _currentPage == index ? 24 : 8,
       decoration: BoxDecoration(
-        color:
-            _currentPage == index ? Colors.blue : Colors.white.withOpacity(0.5),
+        color: _currentPage == index
+            ? Colors.blue
+            : Colors.white.withOpacity(0.5),
         borderRadius: BorderRadius.circular(4),
       ),
     );

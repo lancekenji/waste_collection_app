@@ -6,6 +6,9 @@ import 'about.dart';
 import 'faq.dart';
 import 'report.dart';
 import 'profile.dart';
+import '../services/api_service.dart';
+import '../utils/session.dart';
+import '../models/user_model.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -19,14 +22,20 @@ class _HomePageState extends State<HomePageView> {
   int _selectedTabIndex = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  final ApiService _apiService = ApiService();
+  
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, List<ScheduleEvent>> _events = {};
+  List<Announcement> _announcements = [];
+  bool _isLoadingSchedules = true;
+  bool _isLoadingAnnouncements = true;
 
   @override
   void initState() {
     super.initState();
     _loadScheduleData();
+    _loadAnnouncements();
   }
 
   @override
@@ -35,25 +44,63 @@ class _HomePageState extends State<HomePageView> {
   }
 
   Future<void> _loadScheduleData() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    final token = await getToken();
+    final userId = await getUserId();
 
-    final now = DateTime.now();
-    setState(() {
-      _events = {
-        DateTime(now.year, now.month, 8): [
-          ScheduleEvent(
-            time: '7:00 AM',
-            wasteTypes: ['Biodegradable', 'Recyclable'],
-          ),
-        ],
-        DateTime(now.year, now.month, 15): [
-          ScheduleEvent(time: '8:00 AM', wasteTypes: ['Residual']),
-        ],
-        DateTime(now.year, now.month, 22): [
-          ScheduleEvent(time: '7:30 AM', wasteTypes: ['Special Waste']),
-        ],
-      };
-    });
+    if (token == null || userId == null) {
+      setState(() => _isLoadingSchedules = false);
+      return;
+    }
+
+    final result = await _apiService.getSchedules(token, userId);
+
+    if (result['success'] == true) {
+      final schedules = result['schedules'] as List<Schedule>;
+      final Map<DateTime, List<ScheduleEvent>> events = {};
+
+      for (var schedule in schedules) {
+        final date = DateTime.parse(schedule.scheduleDate);
+        final dateKey = DateTime(date.year, date.month, date.day);
+        
+        final event = ScheduleEvent(
+          time: schedule.scheduleTime,
+          wasteTypes: schedule.wasteTypes,
+        );
+
+        if (events[dateKey] == null) {
+          events[dateKey] = [event];
+        } else {
+          events[dateKey]!.add(event);
+        }
+      }
+
+      setState(() {
+        _events = events;
+        _isLoadingSchedules = false;
+      });
+    } else {
+      setState(() => _isLoadingSchedules = false);
+    }
+  }
+
+  Future<void> _loadAnnouncements() async {
+    final token = await getToken();
+
+    if (token == null) {
+      setState(() => _isLoadingAnnouncements = false);
+      return;
+    }
+
+    final result = await _apiService.getAnnouncements(token);
+
+    if (result['success'] == true) {
+      setState(() {
+        _announcements = result['announcements'] as List<Announcement>;
+        _isLoadingAnnouncements = false;
+      });
+    } else {
+      setState(() => _isLoadingAnnouncements = false);
+    }
   }
 
   List<ScheduleEvent> _getEventsForDay(DateTime day) {
@@ -207,8 +254,8 @@ class _HomePageState extends State<HomePageView> {
                 const ProfileView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -221,8 +268,8 @@ class _HomePageState extends State<HomePageView> {
                 const AboutView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -235,8 +282,8 @@ class _HomePageState extends State<HomePageView> {
                 const FAQView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -249,8 +296,8 @@ class _HomePageState extends State<HomePageView> {
                 const ReportView(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
             transitionDuration: const Duration(milliseconds: 300),
           ),
         ).then((_) => setState(() => _selectedBottomIndex = 0));
@@ -375,33 +422,86 @@ class _HomePageState extends State<HomePageView> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: CarouselSlider.builder(
-                    options: CarouselOptions(
-                      height: 180,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 3),
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.85,
-                    ),
-                    itemCount: 3,
-                    itemBuilder: (context, index, realIndex) {
-                      return Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.image,
-                            size: 48,
-                            color: Colors.grey,
+                  child: _isLoadingAnnouncements
+                      ? const SizedBox(
+                          height: 180,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF0D47A1),
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        )
+                      : _announcements.isEmpty
+                          ? Container(
+                              height: 180,
+                              margin: const EdgeInsets.symmetric(horizontal: 30),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'No announcements available',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : CarouselSlider.builder(
+                              options: CarouselOptions(
+                                height: 180,
+                                autoPlay: true,
+                                autoPlayInterval: const Duration(seconds: 3),
+                                enlargeCenterPage: true,
+                                viewportFraction: 0.85,
+                              ),
+                              itemCount: _announcements.length,
+                              itemBuilder: (context, index, realIndex) {
+                                final announcement = _announcements[index];
+                                return Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: announcement.announcementPhoto != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.network(
+                                            'http://your-domain.com${announcement.announcementPhoto}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Center(
+                                                child: Icon(
+                                                  Icons.image,
+                                                  size: 48,
+                                                  color: Colors.grey,
+                                                ),
+                                              );
+                                            },
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return const Center(
+                                                child: CircularProgressIndicator(
+                                                  color: Color(0xFF0D47A1),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : const Center(
+                                          child: Icon(
+                                            Icons.image,
+                                            size: 48,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                );
+                              },
+                            ),
                 ),
                 Container(
                   width: double.infinity,

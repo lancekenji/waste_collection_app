@@ -196,8 +196,8 @@ class _AboutViewState extends State<AboutView> {
                       const FAQView(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
@@ -210,8 +210,8 @@ class _AboutViewState extends State<AboutView> {
                       const ReportView(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );

@@ -18,6 +18,16 @@ class _LoginViewState extends State<LoginView> {
   bool _obscurePassword = true;
 
   void _handleLogin() async {
+    if (_userController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter email and password'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -27,26 +37,29 @@ class _LoginViewState extends State<LoginView> {
     );
 
     setState(() => _loading = true);
-    bool success = await _controller.login(
-      _userController.text,
+    
+    final result = await _controller.login(
+      _userController.text.trim(),
       _passwordController.text,
     );
+    
     setState(() => _loading = false);
 
     if (mounted) {
       Navigator.pop(context);
     }
 
-    if (success) {
+    if (result['success'] == true) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Login Successful!')));
+        Navigator.pushReplacementNamed(context, '/homepage');
       }
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid username or password')),
+          SnackBar(
+            content: Text(result['message'] ?? 'Login failed'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -117,12 +130,12 @@ class _LoginViewState extends State<LoginView> {
                               controller: _userController,
                               style: const TextStyle(color: Colors.white),
                               decoration: InputDecoration(
-                                hintText: 'Email or Phone',
+                                hintText: 'Email',
                                 hintStyle: TextStyle(
                                   color: Colors.white.withOpacity(0.7),
                                 ),
                                 prefixIcon: const Icon(
-                                  Icons.person,
+                                  Icons.email,
                                   color: Colors.white,
                                 ),
                                 filled: true,

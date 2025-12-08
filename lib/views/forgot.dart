@@ -18,7 +18,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     if (_userController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please enter your email or phone number'),
+          content: Text('Please enter your email'),
           backgroundColor: Colors.red,
         ),
       );
@@ -34,20 +34,22 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     );
 
     setState(() => _loading = true);
-    String result = await _controller.forgotPassword(_userController.text);
+    
+    final result = await _controller.requestPasswordReset(
+      _userController.text.trim(),
+    );
+    
     setState(() => _loading = false);
 
     if (mounted) {
       Navigator.pop(context);
     }
 
-    if (result == 'Success') {
+    if (result['success'] == true) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Password reset link sent! Check your email or phone.',
-            ),
+          SnackBar(
+            content: Text(result['message'] ?? 'Password reset link sent'),
             backgroundColor: Colors.green,
           ),
         );
@@ -63,7 +65,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result),
+            content: Text(result['message'] ?? 'Failed to send reset link'),
             backgroundColor: Colors.red,
           ),
         );

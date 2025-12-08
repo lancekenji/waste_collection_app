@@ -1,15 +1,31 @@
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../models/user_model.dart';
 
-final storage = FlutterSecureStorage();
+final storage = const FlutterSecureStorage();
 
-Future<void> saveToken(String token) async {
-  await storage.write(key: 'token', value: token);
+Future<void> saveUser(User user) async {
+  await storage.write(key: 'user_data', value: jsonEncode(user.toJson()));
+}
+
+Future<User?> getUser() async {
+  final userData = await storage.read(key: 'user_data');
+  if (userData != null) {
+    return User.fromJson(jsonDecode(userData));
+  }
+  return null;
+}
+
+Future<void> clearUser() async {
+  await storage.delete(key: 'user_data');
 }
 
 Future<String?> getToken() async {
-  return await storage.read(key: 'token');
+  final user = await getUser();
+  return user?.token;
 }
 
-Future<void> clearToken() async {
-  await storage.delete(key: 'token');
+Future<int?> getUserId() async {
+  final user = await getUser();
+  return user?.userId;
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../controllers/report_controller.dart';
 import 'about.dart';
 import 'faq.dart';
 import 'profile.dart';
@@ -17,6 +18,8 @@ class _ReportViewState extends State<ReportView> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _descriptionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  final ReportController _controller = ReportController();
+  
   bool _showAppBarBackground = false;
   XFile? _selectedImage;
 
@@ -95,19 +98,38 @@ class _ReportViewState extends State<ReportView> {
       ),
     );
 
-    await Future.delayed(const Duration(seconds: 2));
+    File? photoFile;
+    if (_selectedImage != null && !kIsWeb) {
+      photoFile = File(_selectedImage!.path);
+    }
+
+    final result = await _controller.createReport(
+      description: _descriptionController.text.trim(),
+      photo: photoFile,
+    );
 
     if (mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Report submitted successfully!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      await Future.delayed(const Duration(milliseconds: 500));
-      if (mounted) {
-        Navigator.pop(context);
+      
+      if (result['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message'] ?? 'Report submitted successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        
+        _descriptionController.clear();
+        setState(() {
+          _selectedImage = null;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message'] ?? 'Failed to submit report'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -466,8 +488,8 @@ class _ReportViewState extends State<ReportView> {
                       const AboutView(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
@@ -480,8 +502,8 @@ class _ReportViewState extends State<ReportView> {
                       const FAQView(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                   transitionDuration: const Duration(milliseconds: 300),
                 ),
               );
