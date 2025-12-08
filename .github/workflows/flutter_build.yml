@@ -3,7 +3,7 @@ name: Build ARM64 APK
 on:
   push:
     branches:
-      - main # Or your desired branch
+      - master # Or your desired branch
 
 jobs:
   build:
